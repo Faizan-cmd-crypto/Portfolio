@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-8">Admin Dashboard</h1>
+    
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Projects -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Projects</h3>
+                <i class="fas fa-code text-primary-600 dark:text-primary-400"></i>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 dark:text-gray-50">{{ project_count }}</p>
+            <a href="{{ url_for('admin.projects') }}" class="mt-4 inline-block text-primary-600 dark:text-primary-400 hover:underline">
+                Manage Projects <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        
+        <!-- Categories -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Categories</h3>
+                <i class="fas fa-folder text-primary-600 dark:text-primary-400"></i>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 dark:text-gray-50">{{ category_count }}</p>
+            <a href="{{ url_for('admin.categories') }}" class="mt-4 inline-block text-primary-600 dark:text-primary-400 hover:underline">
+                Manage Categories <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        
+        <!-- Skills -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Skills</h3>
+                <i class="fas fa-star text-primary-600 dark:text-primary-400"></i>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 dark:text-gray-50">{{ skill_count }}</p>
+            <a href="{{ url_for('admin.skills') }}" class="mt-4 inline-block text-primary-600 dark:text-primary-400 hover:underline">
+                Manage Skills <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+        
+        <!-- Experience -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Experience</h3>
+                <i class="fas fa-briefcase text-primary-600 dark:text-primary-400"></i>
+            </div>
+            <p class="text-3xl font-bold text-gray-900 dark:text-gray-50">{{ experience_count }}</p>
+            <a href="{{ url_for('admin.experiences') }}" class="mt-4 inline-block text-primary-600 dark:text-primary-400 hover:underline">
+                Manage Experience <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <a href="{{ url_for('admin.profile') }}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-user text-primary-600 dark:text-primary-400 mr-3"></i>
+                <span class="text-gray-800 dark:text-gray-200">Edit Profile</span>
+            </a>
+            <a href="{{ url_for('admin.new_project') }}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-plus text-primary-600 dark:text-primary-400 mr-3"></i>
+                <span class="text-gray-800 dark:text-gray-200">Add Project</span>
+            </a>
+            <a href="{{ url_for('admin.new_category') }}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-folder-plus text-primary-600 dark:text-primary-400 mr-3"></i>
+                <span class="text-gray-800 dark:text-gray-200">Add Category</span>
+            </a>
+            <a href="{{ url_for('admin.new_skill') }}" class="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                <i class="fas fa-star text-primary-600 dark:text-primary-400 mr-3"></i>
+                <span class="text-gray-800 dark:text-gray-200">Add Skill</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

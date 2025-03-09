@@ -1,0 +1,150 @@
+{% extends 'layout.html' %}
+
+{% block title %}Resume - {{ profile.name if profile else 'Portfolio' }}{% endblock %}
+
+{% block content %}
+<!-- Resume Header -->
+<section class="py-16 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-gray-800 dark:to-gray-900">
+    <div class="container mx-auto px-4">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">Resume</h1>
+            <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                A comprehensive overview of my professional experience, skills, and qualifications.
+            </p>
+            {% if profile %}
+            <a href="{{ url_for('main.download_resume') }}" class="mt-6 inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                <i class="fas fa-download mr-2"></i> Download Resume
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Resume Content -->
+<section class="py-16 bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: Skills & Info -->
+            <div class="space-y-8">
+                <!-- Personal Info -->
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Personal Info</h2>
+                    <div class="space-y-3">
+                        {% if profile and profile.name %}
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Name</p>
+                            <p class="text-gray-800 dark:text-gray-200">{{ profile.name }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if profile and profile.title %}
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Title</p>
+                            <p class="text-gray-800 dark:text-gray-200">{{ profile.title }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if profile and profile.email %}
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Email</p>
+                            <p class="text-gray-800 dark:text-gray-200">{{ profile.email }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        {% if profile and profile.location %}
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Location</p>
+                            <p class="text-gray-800 dark:text-gray-200">{{ profile.location }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Skills -->
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">Skills</h2>
+                    {% if skills %}
+                        {% set categories = skills|groupby('category') %}
+                        {% for category, items in categories %}
+                        <div class="mb-6 last:mb-0">
+                            <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3">{{ category }}</h3>
+                            <div class="space-y-3">
+                                {% for skill in items %}
+                                <div>
+                                    <div class="flex justify-between mb-1">
+                                        <span class="text-gray-700 dark:text-gray-300">{{ skill.name }}</span>
+                                        <span class="text-gray-600 dark:text-gray-400">{{ skill.level }}%</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        <div class="bg-primary-600 dark:bg-primary-500 h-2 rounded-full" style="width: {{ skill.level }}%"></div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-600 dark:text-gray-400">No skills added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Right Column: Experience Timeline -->
+            <div class="lg:col-span-2">
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">Experience</h2>
+                    
+                    <div class="relative">
+                        <!-- Timeline Line -->
+                        <div class="absolute left-3 top-5 h-full w-0.5 bg-gray-200 dark:bg-gray-600"></div>
+                        
+                        <!-- Timeline Items -->
+                        {% if experiences %}
+                            {% for exp in experiences %}
+                            <div class="relative pl-10 pb-8 last:pb-0">
+                                <!-- Timeline Dot -->
+                                <div class="absolute left-0 mt-1.5 w-6 h-6 rounded-full border-4 border-primary-600 dark:border-primary-500 bg-white dark:bg-gray-800"></div>
+                                
+                                <div>
+                                    <div class="flex flex-wrap items-center justify-between mb-1">
+                                        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ exp.title }}</h3>
+                                        <span class="text-sm text-primary-600 dark:text-primary-400">
+                                            {{ exp.start_date.strftime('%b %Y') if exp.start_date else 'N/A' }} - 
+                                            {% if exp.current %}Present{% else %}{{ exp.end_date.strftime('%b %Y') if exp.end_date else 'N/A' }}{% endif %}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <span class="text-gray-700 dark:text-gray-300">{{ exp.company }}</span>
+                                        {% if exp.location %}
+                                        <span class="text-gray-500 dark:text-gray-400"> • {{ exp.location }}</span>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <p class="text-gray-600 dark:text-gray-400">{{ exp.description }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-gray-600 dark:text-gray-400">No experience added yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-16 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Let's Work Together</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+            Interested in collaborating or want to discuss potential opportunities? I'd love to hear from you!
+        </p>
+        <a href="{{ url_for('main.contact') }}" class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors inline-block">
+            Get in Touch
+        </a>
+    </div>
+</section>
+{% endblock %} 

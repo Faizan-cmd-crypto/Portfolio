@@ -1,0 +1,106 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ 'Edit' if experience else 'New' }} Experience - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100">
+                {{ 'Edit' if experience else 'New' }} Experience
+            </h1>
+            <a href="{{ url_for('admin.experiences') }}" class="text-primary-600 dark:text-primary-400 hover:underline">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Experience
+            </a>
+        </div>
+        
+        <form method="POST" enctype="multipart/form-data" class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <div class="space-y-6">
+                <!-- Title -->
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Job Title</label>
+                    <input type="text" id="title" name="title" required
+                           value="{{ experience.title if experience else '' }}"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           placeholder="e.g., Senior Software Engineer">
+                </div>
+                
+                <!-- Company -->
+                <div>
+                    <label for="company" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company</label>
+                    <input type="text" id="company" name="company" required
+                           value="{{ experience.company if experience else '' }}"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           placeholder="e.g., Google">
+                </div>
+                
+                <!-- Location -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Location</label>
+                    <input type="text" id="location" name="location"
+                           value="{{ experience.location if experience else '' }}"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                           placeholder="e.g., San Francisco, CA">
+                </div>
+                
+                <!-- Dates -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="start_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" required
+                               value="{{ experience.start_date.strftime('%Y-%m-%d') if experience and experience.start_date else '' }}"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">End Date</label>
+                        <input type="date" id="end_date" name="end_date"
+                               value="{{ experience.end_date.strftime('%Y-%m-%d') if experience and experience.end_date else '' }}"
+                               class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                               {% if experience and experience.current %}disabled{% endif %}>
+                    </div>
+                </div>
+                
+                <!-- Current Position -->
+                <div class="flex items-center">
+                    <input type="checkbox" id="current" name="current"
+                           {% if experience and experience.current %}checked{% endif %}
+                           class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                           onchange="document.getElementById('end_date').disabled = this.checked">
+                    <label for="current" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
+                        I currently work here
+                    </label>
+                </div>
+                
+                <!-- Description -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
+                    <textarea id="description" name="description" rows="4"
+                              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                              placeholder="Describe your role and achievements...">{{ experience.description if experience else '' }}</textarea>
+                </div>
+                
+                <!-- Company Logo -->
+                <div>
+                    <label for="company_logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company Logo</label>
+                    {% if experience and experience.company_logo %}
+                    <div class="flex items-center mb-2">
+                        <img src="{{ experience.company_logo }}" alt="{{ experience.company }}" class="w-12 h-12 object-contain mr-2">
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Current logo</span>
+                    </div>
+                    {% endif %}
+                    <input type="file" id="company_logo" name="company_logo" accept="image/*"
+                           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Upload a company logo (optional)</p>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="flex justify-end">
+                    <button type="submit" class="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                        {{ 'Save Changes' if experience else 'Add Experience' }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 
