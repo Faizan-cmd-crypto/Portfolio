@@ -1,17 +1,31 @@
-# Flask Portfolio Website
+# Portfolio Website
 
-A modern, responsive portfolio website built with Flask and Tailwind CSS. This application allows you to showcase your projects, skills, and experience with a beautiful user interface.
+A professional portfolio website built with Flask, featuring:
+
+- Admin dashboard for content management
+- Project showcase
+- Skills and experience sections
+- Contact form
+- Resume upload/download
+- Responsive design
 
 ## Features
 
-- **Responsive Design**: Works on all devices from mobile to desktop
-- **Dark/Light Mode**: Toggle between dark and light themes
-- **Project Showcase**: Display your projects with detailed information
-- **Admin Dashboard**: Manage your content through an intuitive admin interface
-- **Rich Text Editor**: Create beautiful content with the integrated CKEditor
-- **OAuth Authentication**: Login with GitHub (easily extendable to other providers)
-- **Tailwind CSS**: Modern, utility-first CSS framework for beautiful UI
-- **SQLite Database**: Simple database setup for easy deployment
+- User authentication
+- Project management
+- Skills management
+- Experience tracking
+- Profile customization
+- Resume handling
+- Contact form
+
+## Tech Stack
+
+- Flask
+- SQLAlchemy
+- PostgreSQL/SQLite
+- HTML/CSS (Tailwind CSS)
+- JavaScript
 
 ## Installation
 
@@ -129,4 +143,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [Flask](https://flask.palletsprojects.com/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Font Awesome](https://fontawesome.com/)
-- [CKEditor](https://ckeditor.com/) 
+- [CKEditor](https://ckeditor.com/)
