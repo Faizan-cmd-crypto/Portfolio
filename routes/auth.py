@@ -29,8 +29,9 @@ def on_load(state):
         client_kwargs={'scope': 'user:email'},
     )
 
-@auth_bp.route('/auth/login', methods=['GET', 'POST'])
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    """Handle user login via form."""
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -42,13 +43,14 @@ def login():
         flash('Invalid credentials')
     return render_template('auth/login.html')
 
-@auth_bp.route('/auth/logout')
+@auth_bp.route('/logout')
 @login_required
 def logout():
+    """Log out the current user."""
     logout_user()
     return redirect(url_for('main.index'))
 
-@auth_bp.route('/auth/change-password', methods=['GET', 'POST'])
+@auth_bp.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
     if request.method == 'POST':
