@@ -29,35 +29,47 @@ def on_load(state):
         client_kwargs={'scope': 'user:email'},
     )
 
-@auth_bp.route('/login', methods=['GET', 'POST'])
+@auth_bp.route('/auth/login', methods=['GET', 'POST'])
 def login():
-    """Handle user login via form or OAuth."""
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-    
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        remember = 'remember' in request.form
-        
         user = User.query.filter_by(email=email).first()
         
         if user and check_password_hash(user.password, password):
-            login_user(user, remember=remember)
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('main.index'))
-        else:
-            flash('Please check your login details and try again.', 'danger')
-    
+            login_user(user)
+            return redirect(url_for('admin.index'))
+        flash('Invalid credentials')
     return render_template('auth/login.html')
 
-@auth_bp.route('/logout')
+@auth_bp.route('/auth/logout')
 @login_required
 def logout():
-    """Log out the current user."""
     logout_user()
-    flash('You have been logged out.', 'success')
     return redirect(url_for('main.index'))
+
+@auth_bp.route('/auth/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        if not check_password_hash(current_user.password, current_password):
+            flash('Current password is incorrect')
+            return redirect(url_for('auth.change_password'))
+            
+        if new_password != confirm_password:
+            flash('New passwords do not match')
+            return redirect(url_for('auth.change_password'))
+            
+        current_user.password = generate_password_hash(new_password)
+        db.session.commit()
+        flash('Password updated successfully')
+        return redirect(url_for('admin.index'))
+        
+    return render_template('auth/change_password.html')
 
 @auth_bp.route('/login/github')
 def github_login():
