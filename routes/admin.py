@@ -13,11 +13,13 @@ from datetime import datetime
 
 admin_bp = Blueprint('admin', __name__)
 
-# Middleware to check if user is admin
+# Protect all admin routes - only logged in users can access
 @admin_bp.before_request
-def check_admin():
-    if not current_user.is_authenticated or not current_user.is_admin:
-        flash('You do not have permission to access the admin area.', 'danger')
+def require_login():
+    if not current_user.is_authenticated:
+        return redirect(url_for('auth.login'))
+    if not current_user.is_admin:
+        flash('You must be an admin to access this area')
         return redirect(url_for('main.index'))
 
 @admin_bp.route('/')

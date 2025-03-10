@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models.user import User
 from models import db
 from authlib.integrations.flask_client import OAuth
+from werkzeug.urls import url_parse
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -32,6 +33,10 @@ def on_load(state):
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Handle user login via form."""
+    # Redirect if user is already logged in
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
+        
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -39,8 +44,12 @@ def login():
         
         if user and check_password_hash(user.password, password):
             login_user(user)
-            return redirect(url_for('admin.index'))
-        flash('Invalid credentials')
+            # Get the next page from args or default to admin dashboard
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('admin.index')
+            return redirect(next_page)
+        flash('Invalid email or password')
     return render_template('auth/login.html')
 
 @auth_bp.route('/logout')
