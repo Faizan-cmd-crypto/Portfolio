@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_ckeditor import CKEditor
 from dotenv import load_dotenv
-from models import db, init_db
+from models import db
 from models.user import User
 from datetime import datetime
 from werkzeug.security import generate_password_hash
@@ -34,7 +34,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     
     # Initialize extensions with app
-    init_db(app)
+    db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
     ckeditor.init_app(app)
@@ -71,30 +71,41 @@ def create_app():
 # Create the app instance
 app = create_app()
 
-# Ensure we have an application context
+def init_admin():
+    """Initialize admin user"""
+    try:
+        # Check if admin user exists, if not create one
+        admin_email = os.getenv('ADMIN_EMAIL', 'faizanahmad1127@gmail.com')
+        admin = User.query.filter_by(email=admin_email).first()
+        
+        if not admin:
+            # Create admin user
+            admin = User(
+                email=admin_email,
+                password=generate_password_hash('Faizan6194214054'),
+                is_admin=True
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print("Admin user created!")
+        else:
+            # Reset admin password
+            admin.password = generate_password_hash('Faizan6194214054')
+            db.session.commit()
+            print("Admin password reset!")
+    except Exception as e:
+        print(f"Error initializing admin: {e}")
+        db.session.rollback()
+
+# Initialize database and admin user
 with app.app_context():
-    # Initialize database (only create tables if they don't exist)
-    db.create_all()
-    
-    # Check if admin user exists, if not create one
-    admin_email = os.getenv('ADMIN_EMAIL', 'faizanahmad1127@gmail.com')
-    admin = User.query.filter_by(email=admin_email).first()
-    
-    if not admin:
-        # Create admin user
-        admin = User(
-            email=admin_email,
-            password=generate_password_hash('Faizan6194214054'),
-            is_admin=True
-        )
-        db.session.add(admin)
-        db.session.commit()
-        print("Admin user created!")
-    else:
-        # Reset admin password
-        admin.password = generate_password_hash('Faizan6194214054')
-        db.session.commit()
-        print("Admin password reset!")
+    try:
+        # Create all tables
+        db.create_all()
+        # Initialize admin user
+        init_admin()
+    except Exception as e:
+        print(f"Error during initialization: {e}")
 
 if __name__ == '__main__':
     app.run(debug=True)
