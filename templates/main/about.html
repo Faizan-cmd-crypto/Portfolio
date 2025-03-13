@@ -7,9 +7,9 @@
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row items-center gap-8">
             <!-- Profile Image -->
-            <div class="w-full md:w-1/3">
+            <div class="w-full md:w-1/3" data-aos="fade-right">
                 {% if profile and profile.photo %}
-                <img src="{{ profile.photo }}" alt="{{ profile.name }}" class="rounded-lg w-full h-auto shadow-lg">
+                <img src="{{ profile.photo }}" alt="{{ profile.name }}" class="rounded-lg w-full h-auto shadow-lg hover:scale-105 transition-transform duration-300">
                 {% else %}
                 <div class="w-full aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
                     <i class="fas fa-user text-6xl text-gray-400 dark:text-gray-500"></i>
@@ -18,32 +18,32 @@
             </div>
             
             <!-- About Content -->
-            <div class="w-full md:w-2/3">
+            <div class="w-full md:w-2/3" data-aos="fade-left">
                 <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4">About Me</h1>
-                <h2 class="text-2xl text-primary-600 dark:text-primary-400 mb-6">{{ profile.title if profile else 'Full Stack Developer' }}</h2>
+                <h2 class="text-2xl gradient-text mb-6">{{ profile.title if profile else 'Full Stack Developer' }}</h2>
                 
                 <div class="prose dark:prose-invert max-w-none">
                     {{ profile.bio if profile else 'Bio not available.' }}
                 </div>
                 
                 <!-- Contact Information -->
-                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4" data-aos="fade-up" data-aos-delay="100">
                     {% if profile and profile.email %}
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 card-hover bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
                         <i class="fas fa-envelope text-primary-600 dark:text-primary-400"></i>
                         <span class="text-gray-700 dark:text-gray-300">{{ profile.email }}</span>
                     </div>
                     {% endif %}
                     
                     {% if profile and profile.location %}
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 card-hover bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
                         <i class="fas fa-map-marker-alt text-primary-600 dark:text-primary-400"></i>
                         <span class="text-gray-700 dark:text-gray-300">{{ profile.location }}</span>
                     </div>
                     {% endif %}
                     
                     {% if profile and profile.phone %}
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 card-hover bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
                         <i class="fas fa-phone text-primary-600 dark:text-primary-400"></i>
                         <span class="text-gray-700 dark:text-gray-300">{{ profile.phone }}</span>
                     </div>
@@ -51,22 +51,28 @@
                 </div>
                 
                 <!-- Social Links -->
-                <div class="mt-8 flex space-x-4">
+                <div class="mt-8 flex space-x-4" data-aos="fade-up" data-aos-delay="200">
                     {% if profile and profile.github %}
-                    <a href="{{ profile.github }}" target="_blank" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="{{ profile.github }}" target="_blank" 
+                       class="hover-lift flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                         <i class="fab fa-github text-2xl"></i>
+                        <span>GitHub</span>
                     </a>
                     {% endif %}
                     
                     {% if profile and profile.linkedin %}
-                    <a href="{{ profile.linkedin }}" target="_blank" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="{{ profile.linkedin }}" target="_blank" 
+                       class="hover-lift flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                         <i class="fab fa-linkedin text-2xl"></i>
+                        <span>LinkedIn</span>
                     </a>
                     {% endif %}
                     
                     {% if profile and profile.twitter %}
-                    <a href="{{ profile.twitter }}" target="_blank" class="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                    <a href="{{ profile.twitter }}" target="_blank" 
+                       class="hover-lift flex items-center space-x-2 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
                         <i class="fab fa-twitter text-2xl"></i>
+                        <span>Twitter</span>
                     </a>
                     {% endif %}
                 </div>
@@ -76,13 +82,15 @@
 </section>
 
 <!-- Call to Action -->
-<section class="py-16 bg-white dark:bg-gray-800">
+<section class="py-16 bg-white dark:bg-gray-800" data-aos="fade-up">
     <div class="container mx-auto px-4 text-center">
-        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Let's Work Together</h2>
+        <h2 class="text-3xl font-bold gradient-text mb-6">Let's Work Together</h2>
         <p class="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
             Interested in collaborating or want to discuss a project? Feel free to reach out!
         </p>
-        <a href="{{ url_for('main.contact') }}" class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors inline-block">
+        <a href="{{ url_for('main.contact') }}" 
+           class="px-8 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center">
+            <i class="fas fa-paper-plane mr-2"></i>
             Get in Touch
         </a>
     </div>
